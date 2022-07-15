@@ -1,0 +1,31 @@
+.nav-bar {
+    background-color: rgb(80, 96, 205) !important;
+}
+
+.app-title {
+    color: white !important;
+    font-family: Hack;
+}
+
+.mystarter-nav {
+    display: flex;
+    flex-direction: row;
+}
+
+.nav-balance-btn {
+    margin-right: 1.5rem;
+}
+
+.connect-mm-btn {
+    border: solid 2px #444;
+    font-size:20px;
+    padding: 20px 40px 20px 70px;
+    background: #f19763;
+    background-image: url("../../assets/images/mm.png");
+    background-size: 40px;
+    background-repeat: no-repeat;
+    background-position: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
