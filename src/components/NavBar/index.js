@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Nav, Navbar, Container, Button, Dropdown, DropdownButton } from 'react-bootstrap';
 import {ethers} from 'ethers';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import {getCookie} from '../../utils/cookie';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -45,7 +48,15 @@ const NavBar = () => {
             })
         }
         else {
-            alert("Please install metamask extension");
+            toast.error('Please install MetaMask extension', {
+                position: "top-center",
+                autoClose: 4000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
         }
     }
 
@@ -91,6 +102,7 @@ const NavBar = () => {
                 {getCookie("account") ? LoggedInNav : MyNav}
             </Navbar.Collapse>
         </Container>
+        <ToastContainer />
         </Navbar>
     )
 }
