@@ -1,0 +1,49 @@
+.create-fund-pj {
+    margin: 0 auto;
+    width: 40rem;
+    padding-top: 2rem;
+}
+
+.create-fund-pj-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 2rem;
+    color: purple;
+    margin-bottom: 3rem;
+}
+
+.start-pj-btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 2.5rem;
+}
+
+.create-project-form {
+    margin-top: 2rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.create-pj-err-msg {
+    color: red;
+    text-align: right;
+}
+
+.create-pj-logo {
+    display: flex;
+    flex-direction: row;
+}
+
+.create-pj-logo-lb {
+    width: 6.5rem;
+}
+
+.picked-logo-preview {
+    width: 8rem;
+    height: 8rem;
+}
+
+.picked-bg-preview {
+    width: 10rem;
+    height: 8rem;
+}

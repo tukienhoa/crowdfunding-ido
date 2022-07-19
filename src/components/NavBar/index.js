@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Nav, Navbar, Container, Button, Dropdown, DropdownButton } from 'react-bootstrap';
 import {ethers} from 'ethers';
 
@@ -21,7 +21,9 @@ const NavBar = () => {
         document.cookie = "account=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         document.cookie = "balance=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
-        window.location.href = "/";
+        setAccount(getCookie("account"));
+        setBalance(getCookie("balance"));
+        setLoginStatus(getCookie("account") ? true : false);
     }
 
     const updateAccountInfo = (address) => {
@@ -37,6 +39,23 @@ const NavBar = () => {
             document.cookie = `balance=${ethers.utils.formatEther(balance)}; max-age=86400; path=/;`;
         });
     }
+
+    var checkBalance = function() {
+        return function() {
+            window.ethereum.request({ 
+                method: "eth_getBalance", 
+                params: [getCookie("account"), "latest"] 
+            })
+            .then((balance) => {
+                if (ethers.utils.formatEther(balance) !== getCookie("balance")) {
+                    setBalance(ethers.utils.formatEther(balance));
+                    document.cookie = `balance=${ethers.utils.formatEther(balance)}; max-age=86400; path=/;`;
+                }
+            });
+        };
+    }();
+    
+    window.setInterval(checkBalance, 500);
 
     const connectWallet = () => {
         if (window.ethereum) {

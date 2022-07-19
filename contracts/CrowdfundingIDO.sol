@@ -14,12 +14,6 @@ struct Vesting {
     bool claimed;
 }
 
-struct IPFSMultihash {
-    bytes32 digest;
-    uint8 hashFunction;
-    uint8 size;
-}
-
 struct Range {
     uint256 start;
     uint256 end;
@@ -34,7 +28,6 @@ struct IDOParams {
     bool approved;
     ERC20Entangled token;
     Multiplier multiplier;
-    IPFSMultihash ipfs;
     Range open;
     uint256 minimumLockedAmount;
     uint256 baseAmount;
@@ -93,13 +86,6 @@ contract CrowdfundingIDO is Ownable {
         idos.push(IDO(params, msg.sender, 0));
         IDO storage ido = idos[id];
         ido.params.token = token;
-        if (ido.params.ipfs.digest == 0) {
-            ido.params.ipfs = IPFSMultihash(
-                0x65b57eb7111c51b539ee694a5dd5f893e3f1ae4f7d47b6c31fb5903c9c8e7141,
-                18,
-                32
-            );
-        }
         ido.params.totalBought = 0;
 
         Vesting[MAX_VESTING_OCURRENCES] storage vest = _vesting.push();
@@ -137,30 +123,10 @@ contract CrowdfundingIDO is Ownable {
         vesting.claimed = true;
     }
 
-    /**
-     * @dev Change IPFS hash
-     */
-    function setIPFS(uint256 id, IPFSMultihash calldata ipfs) external {
-        IDO storage ido = getId(id);
-        require(ido.owner == msg.sender, "must be owner");
-        require(
-            block.timestamp <= ido.params.open.start,
-            "IDO not on pre-sale"
-        );
-        ido.params.ipfs = ipfs;
-        emit IPFSChange(id, ipfs);
-    }
-
-    /**
-     * @dev Change IPFS hash
-     */
     function setLockingAddress(address where) public onlyOwner {
         _lockingContract = ILockedAmount(where);
     }
 
-    /**
-     * @dev Change IPFS hash
-     */
     function lockingContract() public view returns (address) {
         return address(_lockingContract);
     }
@@ -295,11 +261,6 @@ contract CrowdfundingIDO is Ownable {
      * @dev Emitted when an IDO is published.
      */
     event IDOPublished(uint256 id, IDO ido);
-
-    /**
-     * @dev Emitted when an IDO changes his description.
-     */
-    event IPFSChange(uint256 id, IPFSMultihash ipfs);
 
     /**
      * @dev Emitted when a user buys

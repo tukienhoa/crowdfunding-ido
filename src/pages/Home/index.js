@@ -8,12 +8,16 @@ import {getCookie} from '../../utils/cookie';
 
 import './Home.css';
 
+import { ethers } from 'ethers';
+import CrowdfundingIDO from '../../artifacts/contracts/CrowdfundingIDO.sol/CrowdfundingIDO.json';
+const cfAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+
 const Home = () => {
 
     const handleCreateProject = () => {
         if (getCookie("account")) {
             // Navigate to create project page
-            // window.location.href = "/create-project";
+            window.location.href = "/create-project";
         }
         else {
             toast.error('Please access your wallet first!', {
@@ -26,6 +30,20 @@ const Home = () => {
                 progress: undefined,
             });
         }
+
+        // Call contract
+
+        // if (typeof window.ethereum !== 'undefined') {
+        //     const provider = new ethers.providers.Web3Provider(window.ethereum)
+        //     const contract = new ethers.Contract(cfAddress, CrowdfundingIDO.abi, provider)
+        //     try {
+        //       const data = await contract.idosLength()
+        //       alert(data);
+        //     } 
+        //     catch (err) {
+        //       console.log("Error: ", err)
+        //     }
+        // }
     }
 
     const handleProjectClick = (pid) => {
