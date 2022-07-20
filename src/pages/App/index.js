@@ -5,6 +5,7 @@ import NavBar from '../../components/NavBar';
 import { getCookie } from '../../utils/cookie';
 import Home from '../Home';
 import CreateProject from '../CreateProject';
+import ProjectDetails from '../ProjectDetails';
 
 const App = () => {
     return (
@@ -13,6 +14,7 @@ const App = () => {
           <Routes>
             <Route exact path="/" element={<Home/>}/>
             <Route exact path="/create-project" element={getCookie("account") ? <CreateProject /> : <Navigate replace to="/" />} />
+            <Route exact path="/projects/:projectId" element={<ProjectDetails />}/>
           </Routes>
       </Router>
     )

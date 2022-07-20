@@ -1,0 +1,137 @@
+.details-page {
+    margin-top: 5rem;
+    margin-right: 15rem;
+    margin-left: 15rem;
+    margin-bottom: 5rem;
+    font-family: Hack;
+}
+
+.details-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.details-logo {
+    border-radius: 10px;
+    border: 0.01px solid rgb(207, 205, 205);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 8rem;
+    height: 8rem;
+    background-color: lightgray;
+}
+
+.details-pj-name {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: 2.2rem;
+    margin-left: 2rem;
+}
+
+.details-info {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.details-desc {
+    width: 70%;
+}
+
+.details-bg, .details-desc-text {
+    width: 60rem;
+    max-height: 40rem;
+}
+
+.details-desc-title {
+    margin-top: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.details-hr {
+    width: 20rem;
+}
+
+.details-card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 30rem;
+    height: 26rem;
+    margin-left: 8rem;
+    border-radius: 20px;
+    padding: 2rem;
+}
+
+.details-donate-btn {
+    margin-top: 1rem;
+    margin-left: 7rem;
+    width: 12rem;
+    height: 3rem;
+}
+
+.details-display-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.details-fgoal {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.details-coin {
+    color: rgba(6, 34, 242, 0.897);
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-top: 1.2rem;
+}
+
+.details-fgoal-text {
+    color: rgb(148, 163, 184);
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.details-goal-money {
+    font-weight: bold;
+    font-size: 2.5rem;
+}
+
+.details-donate-section {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.details-input-donate {
+    height: 2.5rem;
+    padding: 1rem;
+}
+
+.details-coin-logo {
+    margin-top: 0.5rem;
+    width: 4rem;
+    height: 4rem;
+}
+
+.details-own-pj-btn {
+    margin-top: 4rem;
+    margin-left: 5.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.details-funded-pj-btn {
+    margin-top: 4rem;
+    margin-left: 7.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

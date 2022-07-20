@@ -10,9 +10,37 @@ import './Home.css';
 
 import { ethers } from 'ethers';
 import CrowdfundingIDO from '../../artifacts/contracts/CrowdfundingIDO.sol/CrowdfundingIDO.json';
-const cfAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+// const cfAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+//Ropsten Address
+const cfAddress = "0xd153ef3376eDdf00cb8841b644dCDA262fa97980";
 
 const Home = () => {
+
+    const [IDOs, setIDOs] = useState([]);
+
+    useEffect(() => {
+        fetchIDOs();
+    }, []);
+
+    const fetchIDOs = async () => {
+        if (typeof window.ethereum !== 'undefined') {
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const contract = new ethers.Contract(cfAddress, CrowdfundingIDO.abi, provider)
+            try {
+                var idosLength = await contract.idosLength();
+                idosLength = idosLength.toNumber();
+                const IDOsInfo = [];
+                for (let i = 0; i < idosLength; i++) {
+                    const IDO = await contract.information(i);
+                    IDOsInfo.push(IDO);
+                }
+                setIDOs(IDOsInfo);
+            } 
+            catch (error) {
+                alert("Err: " + error)
+            }
+        }
+    }
 
     const handleCreateProject = () => {
         if (getCookie("account")) {
@@ -30,24 +58,10 @@ const Home = () => {
                 progress: undefined,
             });
         }
-
-        // Call contract
-
-        // if (typeof window.ethereum !== 'undefined') {
-        //     const provider = new ethers.providers.Web3Provider(window.ethereum)
-        //     const contract = new ethers.Contract(cfAddress, CrowdfundingIDO.abi, provider)
-        //     try {
-        //       const data = await contract.idosLength()
-        //       alert(data);
-        //     } 
-        //     catch (err) {
-        //       console.log("Error: ", err)
-        //     }
-        // }
     }
 
     const handleProjectClick = (pid) => {
-        // window.location.href="/projects/" + pid;
+        window.location.href="/projects/" + pid;
     }
 
     return (
@@ -68,43 +82,27 @@ const Home = () => {
             <p className="cf-pj-text">Crowdfunding Projects</p>
 
             <div className="wrapper">
-                {/* {projectList.map((project, index) => (
-                    <div className="home-project-card" onClick={() => handleProjectClick(project.project_id)} key={index}>
-                        <img src={`data:image/jpeg;base64,${project.backgroundImage}`} alt="project-bg" className="home-pj-image"/>
-                        <img src={`data:image/jpeg;base64,${project.logo}`} alt="project-logo" className="home-pj-logo"/>
+                {IDOs.map((project, index) => (
+                    <div className="home-project-card" onClick={() => handleProjectClick(index)} key={index}>
+                        <img src={`https://picsum.photos/1024/1024?nocache=${index}`} alt="project-bg" className="home-pj-image"/>
+                        <img src={`https://picsum.photos/1024/1024?nocache=${index + 10000}`} alt="project-logo" className="home-pj-logo"/>
                         <div className="card-info">
-                            <p className="project-name">{project.name}</p>
-                            <p className="pj-coin">$MC</p>
-                            <p className="pj-description">{project.description}</p>
+                            <p className="project-name">Project {index}</p>
+                            <p className="pj-coin">$TKN</p>
+                            <p className="pj-description">project.description</p>
                             <div className="display-row">
-                                <p>Goal</p>
-                                <p>{project.goal}</p>
+                                <p>Base Amount</p>
+                                <p>{project.params.baseAmount.toNumber()}</p>
+                                {/* <p>{project.goal}</p> */}
                             </div>
                             <div className="display-row">
-                                <p>Total Raised</p>
-                                <p>{project.donation ? project.donation : 0}</p>
-                            </div>
-                        </div>
-                    </div>
-                ))} */}
-                <div className="home-project-card" onClick={() => handleProjectClick(0)}>
-                        <img src={`https://picsum.photos/1024/1024?nocache=${0}`} alt="project-bg" className="home-pj-image"/>
-                        <img src={`https://picsum.photos/1024/1024?nocache=${0 + 10000}`} alt="project-logo" className="home-pj-logo"/>
-                        <div className="card-info">
-                            <p className="project-name">Project name</p>
-                            <p className="pj-coin">$PTK</p>
-                            <p className="pj-description">Description</p>
-                            <div className="display-row">
-                                <p>Goal</p>
-                                <p>999</p>
-                            </div>
-                            <div className="display-row">
-                                <p>Total Raised</p>
-                                <p>0</p>
+                                <p>Total Bought</p>
+                                <p>{project.params.totalBought.toNumber()}</p>
                                 {/* <p>{project.donation ? project.donation : 0}</p> */}
                             </div>
                         </div>
-                </div>
+                    </div>
+                ))}
             </div>
                             
             <br/><br/><br/>
