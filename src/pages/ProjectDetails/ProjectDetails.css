@@ -138,3 +138,7 @@
 .you-bought {
     margin-top: 1.5rem;
 }
+
+.table {
+    border: 0.2rem solid gray;
+}

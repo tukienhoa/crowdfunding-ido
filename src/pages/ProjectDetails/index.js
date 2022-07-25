@@ -150,16 +150,49 @@ const ProjectDetails = () => {
                     <p className="details-desc-title">IDO Rules</p>
                     <hr className="details-hr" />
                     {/* IDO Rules Table */}
-                    <p>Token Address {projectDetails ? projectDetails.params.token : null}</p>
-                    <p>Token Name {tokenName ? tokenName : null}</p>
-                    <p>Token Symbol {tokenSymbol ? tokenSymbol : null}</p>
-                    <p>Maximum Token Crowdsale {projectDetails ? projectDetails.params.baseAmount.toNumber() : null}</p>
-                    <p>Maximum Wei spent per investor {projectDetails ? projectDetails.params.maxAmountPerAddress.toNumber() : null}</p>
-                    <p>Multiplier {projectDetails ? (projectDetails.params.multiplier[0] / projectDetails.params.multiplier[1])  : null}</p>
-                    <p>Raise goal {projectDetails ? (projectDetails.params.baseAmount.toNumber() / (projectDetails.params.multiplier[0] / projectDetails.params.multiplier[1])) : null}</p>
-                    <p>Open range {projectDetails ? `${convertTimestamp2Date(projectDetails.params.open[0].toNumber() * 1000)} - ${convertTimestamp2Date(projectDetails.params.open[1].toNumber() * 1000)}` 
-                                                  : null}
-                    </p>
+                    <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">CROWDSALE RULE</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Token Address</th>
+                            <td>{projectDetails ? projectDetails.params.token : null}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Token Name</th>
+                            <td>{tokenName ? tokenName : null}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Token Symbol</th>
+                            <td>{tokenSymbol ? tokenSymbol : null}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Maximum Token Crowdsale</th>
+                            <td>{projectDetails ? projectDetails.params.baseAmount.toNumber() : null}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Maximum Wei spent per investor</th>
+                            <td>{projectDetails ? projectDetails.params.maxAmountPerAddress.toNumber() : null}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Multiplier</th>
+                            <td>{projectDetails ? (projectDetails.params.multiplier[0] / projectDetails.params.multiplier[1])  : null}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Raise goal</th>
+                            <td>{projectDetails ? (projectDetails.params.baseAmount.toNumber() / (projectDetails.params.multiplier[0] / projectDetails.params.multiplier[1])) : null}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Open range</th>
+                            <td>{projectDetails ? `${convertTimestamp2Date(projectDetails.params.open[0].toNumber() * 1000)} - ${convertTimestamp2Date(projectDetails.params.open[1].toNumber() * 1000)}` 
+                                                  : null}</td>
+                        </tr>
+                    </tbody>
+                    </table>
                 </div>
 
                 <div>
