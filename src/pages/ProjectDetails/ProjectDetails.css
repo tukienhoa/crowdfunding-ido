@@ -58,7 +58,7 @@
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     width: 30rem;
-    height: 26rem;
+    height: 28rem;
     margin-left: 8rem;
     border-radius: 20px;
     padding: 2rem;
@@ -103,7 +103,6 @@
 }
 
 .details-donate-section {
-    margin-top: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -134,4 +133,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.you-bought {
+    margin-top: 1.5rem;
 }

@@ -15,15 +15,13 @@ const NavBar = () => {
     const [account, setAccount] = useState(getCookie("account"));
     const [balance, setBalance] = useState(getCookie("balance"));
 
-    const [loginStatus, setLoginStatus] = useState(getCookie("account") ? true : false);
-
     const handleLogOut = () => {
         document.cookie = "account=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         document.cookie = "balance=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
         setAccount(getCookie("account"));
         setBalance(getCookie("balance"));
-        setLoginStatus(getCookie("account") ? true : false);
+        window.location.reload();
     }
 
     const updateAccountInfo = (address) => {
@@ -63,7 +61,7 @@ const NavBar = () => {
             window.ethereum.request({method:'eth_requestAccounts'})
             .then(res => {
                 updateAccountInfo(res[0]);
-                setLoginStatus(true);
+                window.location.reload();
             })
         }
         else {
@@ -81,8 +79,9 @@ const NavBar = () => {
 
     // Handle account changed
     window.ethereum.on('accountsChanged', (accounts) => {
-        if (loginStatus) {
+        if (getCookie("account")) {
             updateAccountInfo(accounts[0]);
+            window.location.reload();
         }
     });
 

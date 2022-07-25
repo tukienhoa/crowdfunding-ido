@@ -6,14 +6,14 @@ const Progress_bar = ({ bgcolor, progress, height }) => {
         height: height,
         width: 420,
         backgroundColor: 'whitesmoke',
-        borderRadius: 40,
+        // borderRadius: 40,
     }
 
     const Childdiv = {
         height: '100%',
         width: `${progress < 100 ? progress : 100}%`,
         backgroundColor: bgcolor,
-        borderRadius: 40,
+        // borderRadius: 40,
         textAlign: 'right',
         paddingTop: 6
     }

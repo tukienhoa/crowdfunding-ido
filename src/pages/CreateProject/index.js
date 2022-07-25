@@ -12,7 +12,7 @@ import { ethers } from 'ethers';
 import CrowdfundingIDO from '../../artifacts/contracts/CrowdfundingIDO.sol/CrowdfundingIDO.json';
 // const cfAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 //Ropsten Address
-const cfAddress = "0xd153ef3376eDdf00cb8841b644dCDA262fa97980";
+const cfAddress = "0x2FD3a83c8Bf787A90B426D450d45049974beDe32";
 
 const CreateProject = () => {
 
@@ -65,7 +65,7 @@ const CreateProject = () => {
                             true, 
                             getCookie("account"),
                             [1, 1],
-                            [Date.parse(e.target.pjStart.value), Date.parse(e.target.pjEnd.value)],
+                            [Date.parse(e.target.pjStart.value) / 1000, Date.parse(e.target.pjEnd.value) / 1000],
                             10,
                             e.target.pjFGoal.value,
                             // e.target.pjTPWei.value,

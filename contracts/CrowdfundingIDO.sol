@@ -171,7 +171,7 @@ contract CrowdfundingIDO is Ownable {
     }
 
     /**
-     * @dev Buys the base amount in wei, Fails on unsuccessful tx.
+     * @dev Buy the base amount in wei, Fail on unsuccessful tx.
      */
     function buy(uint256 id, uint256 amount) public payable {
         IDO storage ido = getId(id);
