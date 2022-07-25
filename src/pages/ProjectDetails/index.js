@@ -14,7 +14,7 @@ import { ethers } from 'ethers';
 import CrowdfundingIDO from '../../artifacts/contracts/CrowdfundingIDO.sol/CrowdfundingIDO.json';
 // const cfAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 //Ropsten Address
-const cfAddress = "0x2FD3a83c8Bf787A90B426D450d45049974beDe32";
+const cfAddress = "0xB4e7f505350F38b8776FB758858Bc7C1B8c28d4e";
 
 const ProjectDetails = () => {
     let project_params = useParams();
@@ -49,14 +49,46 @@ const ProjectDetails = () => {
         }
     }, [project_params]);
 
+    const [tokenName, setTokenName] = useState(null);
+    const fetchTokenName = useCallback(async () => {
+        if (typeof window.ethereum !== 'undefined') {
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const contract = new ethers.Contract(cfAddress, CrowdfundingIDO.abi, provider)
+            try {
+                const name = await contract.getIDOtokenName(project_params.projectId);
+                setTokenName(name);
+            } 
+            catch (error) {
+                alert("Err: " + error)
+            }
+        }
+    }, [project_params]);
+
+    const [tokenSymbol, setTokenSymbol] = useState(null);
+    const fetchTokenSymbol = useCallback(async () => {
+        if (typeof window.ethereum !== 'undefined') {
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const contract = new ethers.Contract(cfAddress, CrowdfundingIDO.abi, provider)
+            try {
+                const symbol = await contract.getIDOtokenSymbol(project_params.projectId);
+                setTokenSymbol(symbol);
+            } 
+            catch (error) {
+                alert("Err: " + error)
+            }
+        }
+    }, [project_params]);
+
     useEffect(() => {
         fetchProjectDetails();
+        fetchTokenName();
+        fetchTokenSymbol();
 
         if (getCookie("account")) {
             fetchYouBought();
         }
 
-    }, [fetchProjectDetails, fetchYouBought]);
+    }, [fetchProjectDetails, fetchYouBought, fetchTokenName, fetchTokenSymbol]);
 
     const convertTimestamp2Date = (timestamp) => {
         const d = new Date(timestamp);
@@ -119,7 +151,8 @@ const ProjectDetails = () => {
                     <hr className="details-hr" />
                     {/* IDO Rules Table */}
                     <p>Token Address {projectDetails ? projectDetails.params.token : null}</p>
-                    <p>Token Name </p>
+                    <p>Token Name {tokenName ? tokenName : null}</p>
+                    <p>Token Symbol {tokenSymbol ? tokenSymbol : null}</p>
                     <p>Maximum Token Crowdsale {projectDetails ? projectDetails.params.baseAmount.toNumber() : null}</p>
                     <p>Maximum Wei spent per investor {projectDetails ? projectDetails.params.maxAmountPerAddress.toNumber() : null}</p>
                     <p>Multiplier {projectDetails ? (projectDetails.params.multiplier[0] / projectDetails.params.multiplier[1])  : null}</p>

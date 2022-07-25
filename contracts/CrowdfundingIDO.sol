@@ -60,6 +60,14 @@ contract CrowdfundingIDO is Ownable {
         return idos.length;
     }
 
+    function getIDOtokenName(uint256 id) public view returns (string memory) {
+        return idos[id].params.token.name();
+    }
+
+    function getIDOtokenSymbol(uint256 id) public view returns (string memory) {
+        return idos[id].params.token.symbol();
+    }
+
     function getId(uint256 id) internal view returns (IDO storage ido) {
         require(idos.length > id, "IDO id non-existant");
         return idos[id];
