@@ -143,6 +143,41 @@ const ProjectDetails = () => {
         }
     }
 
+    const withdraw = async () => {
+        if (getCookie("account")) {
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const signer = provider.getSigner();
+            const contract = new ethers.Contract(cfAddress, CrowdfundingIDO.abi, signer);
+            try {
+                await contract.withdraw(project_params.projectId, amount);
+                setTotalBought(parseFloat(totalBought) - parseFloat(amount));
+                setYouBought(parseFloat(youBought) - parseFloat(amount));
+            } 
+            catch (error) {
+                toast.error(error.reason, {
+                    position: "top-center",
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        }
+        else {
+            toast.error('Please access your wallet first!', {
+                position: "top-center",
+                autoClose: 4000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    }
+
     return (
         <div className="details-page">
             <div className="details-header">
@@ -251,7 +286,7 @@ const ProjectDetails = () => {
                             </Form.Group>
                             <div className="donate-section-btns">
                                 <Button variant="primary" className="details-donate-btn" onClick={buyIDOToken}><i className="fa-solid fa-coins"></i> Buy Token</Button>
-                                <Button variant="secondary" className="details-donate-btn"><i className="fa fa-dollar"></i> Withdraw</Button>
+                                <Button variant="secondary" className="details-donate-btn" onClick={withdraw}><i className="fa fa-dollar"></i> Withdraw</Button>
                             </div>
                             <ToastContainer />
                         </Form>
