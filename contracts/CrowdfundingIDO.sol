@@ -19,20 +19,18 @@ struct Range {
     uint256 end;
 }
 
-struct Multiplier {
-    uint32 multiplier;
-    uint32 divider;
-}
-
 struct IDOParams {
-    bool approved;
     ERC20Entangled token;
-    Multiplier multiplier;
+    uint32 multiplier;
     Range open;
     uint256 minimumLockedAmount;
     uint256 baseAmount;
     uint256 maxAmountPerAddress;
     uint256 totalBought;
+    string name;
+    string description;
+    string logoIPFS;
+    string bgIPFS;
 }
 
 struct IDO {
@@ -43,16 +41,12 @@ struct IDO {
 
 uint256 constant MAX_VESTING_OCURRENCES = 5;
 
-function _isValidMultiplier(Multiplier memory multiplier) pure returns (bool) {
-    return multiplier.multiplier > 0 && multiplier.divider > 0;
-}
-
 contract CrowdfundingIDO is Ownable {
     IDO[] private idos;
     mapping(uint256 => mapping(address => uint256)) bought;
     mapping(uint256 => mapping(address => bool)) _beenPaid;
     Vesting[MAX_VESTING_OCURRENCES][] _vesting;
-    ILockedAmount private _lockingContract;
+    // ILockedAmount private _lockingContract;
 
     constructor() {}
 
@@ -83,10 +77,6 @@ contract CrowdfundingIDO is Ownable {
         require(
             params.open.start < params.open.end,
             "start time should be before end time"
-        );
-        require(
-            _isValidMultiplier(params.multiplier),
-            "Multiplier isn't valid"
         );
 
         ERC20Entangled token = new ERC20Entangled(tokenName, tokenSymbol);
@@ -131,34 +121,34 @@ contract CrowdfundingIDO is Ownable {
         vesting.claimed = true;
     }
 
-    function setLockingAddress(address where) public onlyOwner {
-        _lockingContract = ILockedAmount(where);
-    }
+    // function setLockingAddress(address where) public onlyOwner {
+    //     _lockingContract = ILockedAmount(where);
+    // }
 
-    function lockingContract() public view returns (address) {
-        return address(_lockingContract);
-    }
+    // function lockingContract() public view returns (address) {
+    //     return address(_lockingContract);
+    // }
 
     /**
      * @dev Returns if the selected address is whitelisted via locking.
      */
 
-    function whitelisted(uint256 id, address account)
-        public
-        view
-        returns (bool status)
-    {
-        if (_lockingContract == ILockedAmount(address(0))) return true;
-        IDO storage ido = idos[id];
-        if (ido.params.minimumLockedAmount == 0) return true;
-        return (_lockingContract.lockedAmount(account) >=
-            ido.params.minimumLockedAmount);
-    }
+    // function whitelisted(uint256 id, address account)
+    //     public
+    //     view
+    //     returns (bool status)
+    // {
+    //     if (_lockingContract == ILockedAmount(address(0))) return true;
+    //     IDO storage ido = idos[id];
+    //     if (ido.params.minimumLockedAmount == 0) return true;
+    //     return (_lockingContract.lockedAmount(account) >=
+    //         ido.params.minimumLockedAmount);
+    // }
 
     /**
      * @dev Returns if the selected address can buy.
      */
-    function canBuy(uint256 id, address account)
+    function canBuy(uint256 id)
         private
         view
         returns (bool status)
@@ -166,8 +156,8 @@ contract CrowdfundingIDO is Ownable {
         IDO storage ido = idos[id];
         return
             (block.timestamp >= ido.params.open.start) &&
-            (block.timestamp < ido.params.open.end) &&
-            whitelisted(id, account);
+            (block.timestamp < ido.params.open.end); // &&
+            // whitelisted(id, account);
     }
 
     function _availableToBuy(IDO storage ido)
@@ -183,8 +173,7 @@ contract CrowdfundingIDO is Ownable {
      */
     function buy(uint256 id, uint256 amount) public payable {
         IDO storage ido = getId(id);
-        require(msg.value == amount, "Non matching wei");
-        require(canBuy(id, msg.sender), "Can't buy");
+        require(canBuy(id), "Can't buy");
         require(amount <= _availableToBuy(ido), "Not enough available to buy");
         require(
             bought[id][msg.sender] + amount <= ido.params.maxAmountPerAddress,
@@ -225,8 +214,7 @@ contract CrowdfundingIDO is Ownable {
         require(block.timestamp >= ido.params.open.end, "Crowdsale still open");
         ido.params.token.mint(
             otherAddress,
-            (amount * ido.params.multiplier.multiplier) /
-                ido.params.multiplier.divider
+            amount * ido.params.multiplier
         );
         _beenPaid[id][msg.sender] = true;
     }

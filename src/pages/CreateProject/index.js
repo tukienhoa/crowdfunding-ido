@@ -14,7 +14,7 @@ import { ethers } from 'ethers';
 import CrowdfundingIDO from '../../artifacts/contracts/CrowdfundingIDO.sol/CrowdfundingIDO.json';
 // const cfAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 //Ropsten Address
-const cfAddress = "0xB4e7f505350F38b8776FB758858Bc7C1B8c28d4e";
+const cfAddress = "0xD08E4fdb1963894E0fB566b3a97f2Daf4584260c";
 
 const CreateProject = () => {
 
@@ -75,56 +75,58 @@ const CreateProject = () => {
         setErrors(errs);
 
         if (isValid) {
-            // if (typeof window.ethereum !== 'undefined') {
-            //     const provider = new ethers.providers.Web3Provider(window.ethereum);
-            //     const signer = provider.getSigner();
-            //     const contract = new ethers.Contract(cfAddress, CrowdfundingIDO.abi, signer);
-            //     try {
-            //         await contract.publish(
-            //             e.target.pjTName.value.trim(),
-            //             e.target.pjTSymbol.value.trim(),
-            //             [
-            //                 true, 
-            //                 getCookie("account"),
-            //                 [1, 1],
-            //                 [Date.parse(e.target.pjStart.value) / 1000, Date.parse(e.target.pjEnd.value) / 1000],
-            //                 10,
-            //                 e.target.pjFGoal.value,
-            //                 // e.target.pjTPWei.value,
-            //                 e.target.pjMaxWei.value,
-            //                 0
-            //             ],
-            //             [
-            //                 ["0x0000000000000000000000000000000000000000", 0, 0, false],
-            //                 ["0x0000000000000000000000000000000000000000", 0, 0, false], 
-            //                 ["0x0000000000000000000000000000000000000000", 0, 0, false], 
-            //                 ["0x0000000000000000000000000000000000000000", 0, 0, false], 
-            //                 ["0x0000000000000000000000000000000000000000", 0, 0, false]
-            //             ]
+            if (typeof window.ethereum !== 'undefined') {
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const signer = provider.getSigner();
+                const contract = new ethers.Contract(cfAddress, CrowdfundingIDO.abi, signer);
+                try {
+                    await contract.publish(
+                        e.target.pjTName.value.trim(),
+                        e.target.pjTSymbol.value.trim(),
+                        [
+                            getCookie("account"),
+                            1,
+                            [Date.parse(e.target.pjStart.value) / 1000, Date.parse(e.target.pjEnd.value) / 1000],
+                            10,
+                            e.target.pjFGoal.value,
+                            e.target.pjMaxWei.value,
+                            0,
+                            e.target.pjName.value.trim(),
+                            descriptionUrl,
+                            logoUrl,
+                            bgUrl
+                        ],
+                        [
+                            ["0x0000000000000000000000000000000000000000", 0, 0, false],
+                            ["0x0000000000000000000000000000000000000000", 0, 0, false], 
+                            ["0x0000000000000000000000000000000000000000", 0, 0, false], 
+                            ["0x0000000000000000000000000000000000000000", 0, 0, false], 
+                            ["0x0000000000000000000000000000000000000000", 0, 0, false]
+                        ]
 
-            //         );
-            //         toast.success('Project published', {
-            //             position: "top-center",
-            //             autoClose: 4000,
-            //             hideProgressBar: false,
-            //             closeOnClick: true,
-            //             pauseOnHover: false,
-            //             draggable: true,
-            //             progress: undefined,
-            //         });
-            //     } 
-            //     catch(err) {
-            //         toast.error('Error: ' + err, {
-            //             position: "top-center",
-            //             autoClose: 4000,
-            //             hideProgressBar: false,
-            //             closeOnClick: true,
-            //             pauseOnHover: false,
-            //             draggable: true,
-            //             progress: undefined,
-            //         });
-            //     }
-            // }
+                    );
+                    toast.success('Project published', {
+                        position: "top-center",
+                        autoClose: 4000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                } 
+                catch(err) {
+                    toast.error('Error: ' + err, {
+                        position: "top-center",
+                        autoClose: 4000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+            }
 
         }
     }

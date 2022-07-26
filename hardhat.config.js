@@ -14,7 +14,7 @@ module.exports = {
   },
   networks: {
     hardhat: {
-      chainId: 1337
+      chainId: 1337,
       // throwOnTransactionFailures: true,
       // throwOnCallFailures: true,
       // allowUnlimitedContractSize: true,

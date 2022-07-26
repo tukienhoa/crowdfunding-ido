@@ -12,7 +12,7 @@ import { ethers } from 'ethers';
 import CrowdfundingIDO from '../../artifacts/contracts/CrowdfundingIDO.sol/CrowdfundingIDO.json';
 // const cfAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 //Ropsten Address
-const cfAddress = "0xB4e7f505350F38b8776FB758858Bc7C1B8c28d4e";
+const cfAddress = "0xD08E4fdb1963894E0fB566b3a97f2Daf4584260c";
 
 const Home = () => {
 
@@ -84,8 +84,8 @@ const Home = () => {
             <div className="wrapper">
                 {IDOs.map((project, index) => (
                     <div className="home-project-card" onClick={() => handleProjectClick(index)} key={index}>
-                        <img src={`https://picsum.photos/1024/1024?nocache=${index}`} alt="project-bg" className="home-pj-image"/>
-                        <img src={`https://picsum.photos/1024/1024?nocache=${index + 10000}`} alt="project-logo" className="home-pj-logo"/>
+                        <img src={project.params.bgIPFS} alt="project-bg" className="home-pj-image"/>
+                        <img src={project.params.logoIPFS} alt="project-logo" className="home-pj-logo"/>
                         <div className="card-info">
                             <p className="project-name">Project {index}</p>
                             <p className="pj-coin">$TKN</p>

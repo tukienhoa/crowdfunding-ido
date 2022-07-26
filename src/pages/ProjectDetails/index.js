@@ -14,21 +14,12 @@ import { ethers } from 'ethers';
 import CrowdfundingIDO from '../../artifacts/contracts/CrowdfundingIDO.sol/CrowdfundingIDO.json';
 // const cfAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 //Ropsten Address
-const cfAddress = "0xB4e7f505350F38b8776FB758858Bc7C1B8c28d4e";
+const cfAddress = "0xD08E4fdb1963894E0fB566b3a97f2Daf4584260c";
 
 const ProjectDetails = () => {
     let project_params = useParams();
 
-    // const [desc, setDesc] = useState("");
-    // const fetchDesc = () => {
-    //     const url = "https://ipfs.infura.io/ipfs/QmV1Zmhr6nFWw1u3rKZG3FuLH9AxfdLgxhAoKvUtVpH83X";
-    //     fetch(url)
-    //         .then( r => r.text() )
-    //         .then( t => {
-    //             console.log(t);
-    //         })
-    // }
-
+    const [desc, setDesc] = useState("");
 
     const [totalBought, setTotalBought] = useState(0);
     const [projectDetails, setProjectDetails] = useState(null);
@@ -40,6 +31,12 @@ const ProjectDetails = () => {
                 const project = await contract.information(project_params.projectId);
                 setProjectDetails(project);
                 setTotalBought(project.params.totalBought.toNumber());
+                // console.log(project.params.description);
+                fetch(project.params.description)
+                    .then( r => r.text() )
+                    .then( t => {
+                        setDesc(t);
+                    });
             } 
             catch (error) {
                 alert("Err: " + error)
@@ -94,7 +91,6 @@ const ProjectDetails = () => {
         fetchProjectDetails();
         fetchTokenName();
         fetchTokenSymbol();
-        // fetchDesc();
 
         if (getCookie("account")) {
             fetchYouBought();
@@ -181,19 +177,18 @@ const ProjectDetails = () => {
     return (
         <div className="details-page">
             <div className="details-header">
-                <img src={`https://picsum.photos/1024/1024?nocache=${project_params.projectId + 10000}`} alt="project-logo" className="details-logo" />
-                <p className="details-pj-name">Project {project_params.projectId}</p>
+                <img src={projectDetails ? projectDetails.params.logoIPFS : null} alt="project-logo" className="details-logo" />
+                <p className="details-pj-name">{projectDetails ? projectDetails.params.name : null}</p>
             </div>
 
             <div className="details-info">
                 <div className="details-desc">
-                    <img src={`https://picsum.photos/1024/1024?nocache=${project_params.projectId}`} alt="project-bg" className="details-bg" />
+                    <img src={projectDetails ? projectDetails.params.bgIPFS : null} alt="project-bg" className="details-bg" />
                     <p className="details-desc-title">Description</p>
                     <hr className="details-hr" />
                     <p className="details-desc-text">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    {desc}
                     </p>
-                    {/* <p>{desc}</p> */}
                     <p className="details-desc-title">IDO Rules</p>
                     <hr className="details-hr" />
                     {/* IDO Rules Table */}
