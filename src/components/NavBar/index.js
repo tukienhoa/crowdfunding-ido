@@ -35,6 +35,7 @@ const NavBar = () => {
 
             document.cookie = `account=${address}; max-age=86400; path=/;`;
             document.cookie = `balance=${ethers.utils.formatEther(balance)}; max-age=86400; path=/;`;
+            window.location.reload();
         });
     }
 
@@ -61,7 +62,6 @@ const NavBar = () => {
             window.ethereum.request({method:'eth_requestAccounts'})
             .then(res => {
                 updateAccountInfo(res[0]);
-                window.location.reload();
             })
         }
         else {
@@ -81,7 +81,6 @@ const NavBar = () => {
     window.ethereum.on('accountsChanged', (accounts) => {
         if (getCookie("account")) {
             updateAccountInfo(accounts[0]);
-            window.location.reload();
         }
     });
 

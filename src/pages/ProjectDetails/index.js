@@ -150,7 +150,7 @@ const ProjectDetails = () => {
                     <p className="details-desc-title">IDO Rules</p>
                     <hr className="details-hr" />
                     {/* IDO Rules Table */}
-                    <table class="table">
+                    <table className="table">
                     <thead>
                     <tr>
                         <th scope="col">CROWDSALE RULE</th>
