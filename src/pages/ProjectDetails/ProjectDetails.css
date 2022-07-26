@@ -58,16 +58,14 @@
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     width: 30rem;
-    height: 28rem;
+    height: 29rem;
     margin-left: 8rem;
     border-radius: 20px;
     padding: 2rem;
 }
 
 .details-donate-btn {
-    margin-top: 1rem;
-    margin-left: 7rem;
-    width: 12rem;
+    width: 10rem;
     height: 3rem;
 }
 
@@ -141,4 +139,11 @@
 
 .table {
     border: 0.2rem solid gray;
+}
+
+.donate-section-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 1.5rem;
 }

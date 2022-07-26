@@ -233,11 +233,14 @@ const ProjectDetails = () => {
                         
                         <Form method="POST" className="details-donate-section">
                             <Form.Group>
-                                <Form.Control className="details-input-donate" type="number" placeholder="Donate amount" name="donateAmount" 
+                                <Form.Control className="details-input-donate" type="number" placeholder="Amount" name="donateAmount" 
                                     onChange={(e) => setAmount(e.target.value.length === 0 ? 0 : e.target.value)}  
                                 />
                             </Form.Group>
-                            <Button variant="primary" className="details-donate-btn" onClick={buyIDOToken}><i className="fa-regular fa-heart"></i> Donate</Button>
+                            <div className="donate-section-btns">
+                                <Button variant="primary" className="details-donate-btn" onClick={buyIDOToken}><i className="fa-solid fa-coins"></i> Buy Token</Button>
+                                <Button variant="secondary" className="details-donate-btn"><i className="fa fa-dollar"></i> Withdraw</Button>
+                            </div>
                             <ToastContainer />
                         </Form>
                     </div>
