@@ -8,6 +8,8 @@ import "./CreateProject.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { TextUpload, ImageUpload } from "react-ipfs-uploader";
+
 import { ethers } from 'ethers';
 import CrowdfundingIDO from '../../artifacts/contracts/CrowdfundingIDO.sol/CrowdfundingIDO.json';
 // const cfAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
@@ -15,6 +17,10 @@ import CrowdfundingIDO from '../../artifacts/contracts/CrowdfundingIDO.sol/Crowd
 const cfAddress = "0xB4e7f505350F38b8776FB758858Bc7C1B8c28d4e";
 
 const CreateProject = () => {
+
+    const [descriptionUrl, setDescriptionUrl] = useState("");
+    const [bgUrl, setBgUrl] = useState('');
+    const [logoUrl, setLogoUrl] = useState('');
 
     const [errors, setErrors] = useState({});
     const handleSubmit = async (e) => {
@@ -24,6 +30,22 @@ const CreateProject = () => {
         var errs = {};
         setErrors({});
 
+        if (descriptionUrl.trim().length === 0) {
+            isValid = false;
+            errs["pjDesc"] = "Project description cannot be blank.";
+        }
+        if (bgUrl.trim().length === 0) {
+            isValid = false;
+            errs["pjBg"] = "Please upload project background image.";
+        }
+        if (logoUrl.trim().length === 0) {
+            isValid = false;
+            errs["pjLogo"] = "Please upload project logo image.";
+        }
+        if (e.target.pjName.value.trim().length === 0) {
+            isValid = false;
+            errs["pjName"] = "Project name cannot be blank.";
+        }
         if (e.target.pjTName.value.trim().length === 0) {
             isValid = false;
             errs["pjTName"] = "Token name cannot be blank.";
@@ -53,56 +75,57 @@ const CreateProject = () => {
         setErrors(errs);
 
         if (isValid) {
-            if (typeof window.ethereum !== 'undefined') {
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                const signer = provider.getSigner();
-                const contract = new ethers.Contract(cfAddress, CrowdfundingIDO.abi, signer);
-                try {
-                    await contract.publish(
-                        e.target.pjTName.value.trim(),
-                        e.target.pjTSymbol.value.trim(),
-                        [
-                            true, 
-                            getCookie("account"),
-                            [1, 1],
-                            [Date.parse(e.target.pjStart.value) / 1000, Date.parse(e.target.pjEnd.value) / 1000],
-                            10,
-                            e.target.pjFGoal.value,
-                            // e.target.pjTPWei.value,
-                            e.target.pjMaxWei.value,
-                            0
-                        ],
-                        [
-                            ["0x0000000000000000000000000000000000000000", 0, 0, false],
-                            ["0x0000000000000000000000000000000000000000", 0, 0, false], 
-                            ["0x0000000000000000000000000000000000000000", 0, 0, false], 
-                            ["0x0000000000000000000000000000000000000000", 0, 0, false], 
-                            ["0x0000000000000000000000000000000000000000", 0, 0, false]
-                        ]
+            // if (typeof window.ethereum !== 'undefined') {
+            //     const provider = new ethers.providers.Web3Provider(window.ethereum);
+            //     const signer = provider.getSigner();
+            //     const contract = new ethers.Contract(cfAddress, CrowdfundingIDO.abi, signer);
+            //     try {
+            //         await contract.publish(
+            //             e.target.pjTName.value.trim(),
+            //             e.target.pjTSymbol.value.trim(),
+            //             [
+            //                 true, 
+            //                 getCookie("account"),
+            //                 [1, 1],
+            //                 [Date.parse(e.target.pjStart.value) / 1000, Date.parse(e.target.pjEnd.value) / 1000],
+            //                 10,
+            //                 e.target.pjFGoal.value,
+            //                 // e.target.pjTPWei.value,
+            //                 e.target.pjMaxWei.value,
+            //                 0
+            //             ],
+            //             [
+            //                 ["0x0000000000000000000000000000000000000000", 0, 0, false],
+            //                 ["0x0000000000000000000000000000000000000000", 0, 0, false], 
+            //                 ["0x0000000000000000000000000000000000000000", 0, 0, false], 
+            //                 ["0x0000000000000000000000000000000000000000", 0, 0, false], 
+            //                 ["0x0000000000000000000000000000000000000000", 0, 0, false]
+            //             ]
 
-                    );
-                    toast.success('Project published', {
-                        position: "top-center",
-                        autoClose: 4000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: false,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                } 
-                catch(err) {
-                    toast.error('Error: ' + err, {
-                        position: "top-center",
-                        autoClose: 4000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: false,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                }
-            }
+            //         );
+            //         toast.success('Project published', {
+            //             position: "top-center",
+            //             autoClose: 4000,
+            //             hideProgressBar: false,
+            //             closeOnClick: true,
+            //             pauseOnHover: false,
+            //             draggable: true,
+            //             progress: undefined,
+            //         });
+            //     } 
+            //     catch(err) {
+            //         toast.error('Error: ' + err, {
+            //             position: "top-center",
+            //             autoClose: 4000,
+            //             hideProgressBar: false,
+            //             closeOnClick: true,
+            //             pauseOnHover: false,
+            //             draggable: true,
+            //             progress: undefined,
+            //         });
+            //     }
+            // }
+
         }
     }
 
@@ -112,7 +135,34 @@ const CreateProject = () => {
         <div className="create-fund-pj">
             <p className="create-fund-pj-title">Create Your Funding Project</p>
 
+            <div className="upload-ipfs-section">
+                <p className="key-title">Project description</p>
+                <TextUpload setUrl={setDescriptionUrl} />
+                <p className="create-pj-err-msg">{errors.pjDesc}</p>
+                {descriptionUrl}
+
+                <p className="key-title">Project background image</p>
+                <ImageUpload setUrl={setBgUrl} />
+                <a href={bgUrl} target="_blank" rel="noopener noreferrer">
+                    {bgUrl}
+                </a>
+                <p className="create-pj-err-msg">{errors.pjBg}</p>
+
+                <p className="key-title">Project logo image</p>
+                <ImageUpload setUrl={setLogoUrl} />
+                <a href={logoUrl} target="_blank" rel="noopener noreferrer">
+                    {logoUrl}
+                </a>
+                <p className="create-pj-err-msg">{errors.pjLogo}</p>
+            </div>
+
             <Form method="POST" className="create-project-form" onSubmit={handleSubmit}>
+                <Form.Group className="mb-3 lb-textfield">
+                    <Form.Label className="key-title">Project name</Form.Label>
+                    <Form.Control type="text" name="pjName" placeholder="My Project"/>
+                </Form.Group>
+                <p className="create-pj-err-msg">{errors.pjName}</p>
+
                 <Form.Group className="mb-3 lb-textfield">
                     <Form.Label className="key-title">Token name</Form.Label>
                     <Form.Control type="text" name="pjTName" placeholder="My Token"/>
@@ -138,7 +188,7 @@ const CreateProject = () => {
                 <p className="create-pj-err-msg">{errors.pjTPWei}</p>
 
                 <Form.Group className="mb-3 lb-textfield">
-                    <Form.Label className="key-title">Max Wei spended per address</Form.Label>
+                    <Form.Label className="key-title">Max Wei spent per address</Form.Label>
                     <Form.Control type="number" name="pjMaxWei" required/>
                 </Form.Group>
                 <p className="create-pj-err-msg">{errors.pjMaxWei}</p>
