@@ -17,6 +17,7 @@ const cfAddress = "0xD08E4fdb1963894E0fB566b3a97f2Daf4584260c";
 const Home = () => {
 
     const [IDOs, setIDOs] = useState([]);
+    const [descriptions, setDescriptions] = useState([]);
 
     useEffect(() => {
         fetchIDOs();
@@ -29,17 +30,36 @@ const Home = () => {
             try {
                 var idosLength = await contract.idosLength();
                 idosLength = idosLength.toNumber();
-                const IDOsInfo = [];
+                var IDOsInfo = [];
+                var descriptionList = [];
+
                 for (let i = 0; i < idosLength; i++) {
                     const IDO = await contract.information(i);
+                    await fetch(IDO.params.description)
+                        .then( r => r.text() )
+                        .then( t => {
+                            descriptionList.push(t);
+                        });
                     IDOsInfo.push(IDO);
                 }
                 setIDOs(IDOsInfo);
+                setDescriptions(descriptionList);
             } 
             catch (error) {
-                alert("Err: " + error)
+
             }
         }
+    }
+
+    const checkIDOstatus = (start, end) => {
+        var timestampInSeconds = Date.now() / 1000;
+        if (timestampInSeconds >= start && timestampInSeconds <= end) {
+            return 1;
+        }
+        if (timestampInSeconds < start) {
+            return 0;
+        }
+        return 2;
     }
 
     const handleCreateProject = () => {
@@ -87,9 +107,13 @@ const Home = () => {
                         <img src={project.params.bgIPFS} alt="project-bg" className="home-pj-image"/>
                         <img src={project.params.logoIPFS} alt="project-logo" className="home-pj-logo"/>
                         <div className="card-info">
-                            <p className="project-name">Project {index}</p>
-                            <p className="pj-coin">$TKN</p>
-                            <p className="pj-description">project.description</p>
+                            <div className='home-pj-name-status'>
+                                <p className="project-name">{project.params.name}</p>
+                                {checkIDOstatus(project.params.open[0].toNumber(), project.params.open[1].toNumber()) === 0 ? <p className='pj-status-comingsoon'>Coming soon</p>
+                                 : (checkIDOstatus(project.params.open[0].toNumber(), project.params.open[1].toNumber()) === 1 ? <p className='pj-status-opening'>Opening</p>
+                                  : <p className='pj-status-ended'>Ended</p>)}
+                            </div>
+                            <p className="pj-description">{descriptions[index]}</p>
                             <div className="display-row">
                                 <p>Base Amount</p>
                                 <p>{project.params.baseAmount.toNumber()}</p>

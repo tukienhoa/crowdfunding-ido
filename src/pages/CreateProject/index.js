@@ -85,7 +85,7 @@ const CreateProject = () => {
                         e.target.pjTSymbol.value.trim(),
                         [
                             getCookie("account"),
-                            1,
+                            e.target.pjTPWei.value,
                             [Date.parse(e.target.pjStart.value) / 1000, Date.parse(e.target.pjEnd.value) / 1000],
                             10,
                             e.target.pjFGoal.value,
