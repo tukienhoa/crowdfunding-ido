@@ -174,11 +174,27 @@ const ProjectDetails = () => {
         }
     }
 
+    const checkIDOstatus = (start, end) => {
+        var timestampInSeconds = Date.now() / 1000;
+        if (timestampInSeconds >= start && timestampInSeconds <= end) {
+            return 1;
+        }
+        if (timestampInSeconds < start) {
+            return 0;
+        }
+        return 2;
+    }
+
     return (
         <div className="details-page">
             <div className="details-header">
                 <img src={projectDetails ? projectDetails.params.logoIPFS : null} alt="project-logo" className="details-logo" />
                 <p className="details-pj-name">{projectDetails ? projectDetails.params.name : null}</p>
+                <div>
+                    {projectDetails ? (checkIDOstatus(projectDetails.params.open[0].toNumber(), projectDetails.params.open[1].toNumber()) === 0 ? <p className='detail-status-comingsoon'>Coming soon</p>
+                                    : (checkIDOstatus(projectDetails.params.open[0].toNumber(), projectDetails.params.open[1].toNumber()) === 1 ? <p className='detail-status-opening'>Opening</p>
+                                    : <p className='detail-status-ended'>Ended</p>)) : null}
+                </div>
             </div>
 
             <div className="details-info">

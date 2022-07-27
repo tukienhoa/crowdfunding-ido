@@ -147,3 +147,45 @@
     justify-content: space-around;
     margin-top: 1.5rem;
 }
+
+.detail-status-comingsoon {
+    border: 1px solid transparent;
+    margin-left: 1rem;
+    margin-top: 2rem;
+    height: 2rem;
+    padding: 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 10px;
+    background-color: rgb(152, 170, 192);
+    letter-spacing: 0.01em;
+    
+}
+
+.detail-status-opening {
+    border: 1px solid transparent;
+    padding: 6px;
+    margin-left: 1rem;
+    margin-top: 2rem;
+    height: 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 10px;
+    background-color: greenyellow;
+    letter-spacing: 0.01em;
+    
+}
+
+.detail-status-ended {
+    border: 1px solid transparent;
+    padding: 6px;
+    margin-left: 1rem;
+    margin-top: 2rem;
+    height: 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 10px;
+    background-color: red;
+    letter-spacing: 0.01em;
+    
+}
