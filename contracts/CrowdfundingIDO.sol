@@ -46,6 +46,7 @@ contract CrowdfundingIDO is Ownable {
     mapping(uint256 => mapping(address => uint256)) bought;
     mapping(uint256 => mapping(address => bool)) _beenPaid;
     Vesting[MAX_VESTING_OCURRENCES][] _vesting;
+
     // ILockedAmount private _lockingContract;
 
     constructor() {}
@@ -148,16 +149,12 @@ contract CrowdfundingIDO is Ownable {
     /**
      * @dev Returns if the selected address can buy.
      */
-    function canBuy(uint256 id)
-        private
-        view
-        returns (bool status)
-    {
+    function canBuy(uint256 id) private view returns (bool status) {
         IDO storage ido = idos[id];
         return
             (block.timestamp >= ido.params.open.start) &&
             (block.timestamp < ido.params.open.end); // &&
-            // whitelisted(id, account);
+        // whitelisted(id, account);
     }
 
     function _availableToBuy(IDO storage ido)
@@ -212,10 +209,7 @@ contract CrowdfundingIDO is Ownable {
         require(amount > 0, "Nothing to pay");
         require(!_beenPaid[id][msg.sender], "Already paid");
         require(block.timestamp >= ido.params.open.end, "Crowdsale still open");
-        ido.params.token.mint(
-            otherAddress,
-            amount * ido.params.multiplier
-        );
+        ido.params.token.mint(otherAddress, amount * ido.params.multiplier);
         _beenPaid[id][msg.sender] = true;
     }
 

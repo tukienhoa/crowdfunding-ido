@@ -31,7 +31,6 @@ const ProjectDetails = () => {
                 const project = await contract.information(project_params.projectId);
                 setProjectDetails(project);
                 setTotalBought(project.params.totalBought.toNumber());
-                // console.log(project.params.description);
                 fetch(project.params.description)
                     .then( r => r.text() )
                     .then( t => {
@@ -185,6 +184,43 @@ const ProjectDetails = () => {
         return 2;
     }
 
+    const claimToken = async () => {
+        if (getCookie("account")) {
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const signer = provider.getSigner();
+            const contract = new ethers.Contract(cfAddress, CrowdfundingIDO.abi, signer);
+            try {
+                await contract.getPayout(project_params.projectId);
+            } 
+            catch (error) {
+                toast.error(error.reason, {
+                    position: "top-center",
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        }
+        else {
+            toast.error('Please access your wallet first!', {
+                position: "top-center",
+                autoClose: 4000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    }
+
+    const getRaised = () => {
+
+    }
+
     return (
         <div className="details-page">
             <div className="details-header">
@@ -267,22 +303,7 @@ const ProjectDetails = () => {
                             <p>{totalBought}</p>
                         </div>
 
-                        {/* <Progressbar bgcolor="#0d6efd" progress={projectDetails.donation / projectDetails.goal * 100} height={40} width={20}/> */}
                         <Progressbar bgcolor="#0d6efd" progress={projectDetails ? (projectDetails.params.totalBought.toNumber() / projectDetails.params.baseAmount.toNumber() * 100) : 0} height={40} width={20}/>
-
-                        {/* {projectDetails.publicKey === getCookie("publicKey")
-                            ? <Button variant="secondary" className="details-own-pj-btn" disabled>This is your project!</Button>
-                            :
-                            (projectDetails.pjStatus === 0 ?
-                                <Form method="POST" className="details-donate-section" onSubmit={(e) => handleDonate(e)}>
-                                    <Form.Group>
-                                        <Form.Control className="details-input-donate" type="number" placeholder="Donate amount" name="donateAmount" required />
-                                    </Form.Group>
-                                    <Button type="submit" variant="primary" className="details-donate-btn"><i className="fa-regular fa-heart"></i> Donate</Button>
-                                    <ToastContainer />
-                                </Form>
-                                : <Button variant="success" className="details-funded-pj-btn" disabled>Project funded</Button>
-                            )} */}
 
                         <div className="details-display-row you-bought">
                             <p>You Bought</p>
@@ -295,10 +316,15 @@ const ProjectDetails = () => {
                                     onChange={(e) => setAmount(e.target.value.length === 0 ? 0 : e.target.value)}  
                                 />
                             </Form.Group>
-                            <div className="donate-section-btns">
-                                <Button variant="primary" className="details-donate-btn" onClick={buyIDOToken}><i className="fa-solid fa-coins"></i> Buy Token</Button>
-                                <Button variant="secondary" className="details-donate-btn" onClick={withdraw}><i className="fa fa-dollar"></i> Withdraw</Button>
-                            </div>
+                            {projectDetails ? (projectDetails.owner.toLowerCase() !== getCookie("account").toLowerCase() ?
+                            (<div>
+                                <div className="donate-section-btns">
+                                    <Button variant="primary" className="details-donate-btn" onClick={buyIDOToken}><i className="fa-solid fa-coins"></i> Buy Token</Button>
+                                    <Button variant="secondary" className="details-donate-btn" onClick={withdraw}><i className="fa fa-dollar"></i> Withdraw</Button>
+                                </div>
+                                <Button className="claim-token-btn" onClick={claimToken}><i className="fa-solid fa-sack-dollar"></i> Claim Token</Button>
+                            </div>)
+                            : <Button className="get-raised-btn" onClick={getRaised}><i className="fa-solid fa-sack-dollar"></i> Get Raised</Button>) : null}
                             <ToastContainer />
                         </Form>
                     </div>

@@ -67,7 +67,7 @@ const CreateProject = () => {
             errs["pjMaxWei"] = "Invalid value.";
         }
         
-        if (Date.parse(e.target.pjEnd.value) < Date.parse(e.target.pjStart.value)) {
+        if (Date.parse(e.target.pjEnd.value) <= Date.parse(e.target.pjStart.value)) {
             isValid = false;
             errs["pjDate"] = "Start time must be before end time.";
         }
@@ -205,7 +205,7 @@ const CreateProject = () => {
                 <Form.Group className="mb-3 lb-textfield">
                     <Form.Label className="key-title">End</Form.Label>
                     <Form.Control type="datetime-local" name="pjEnd" 
-                                  min={`${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, "0")}-${(today.getDate() + 1).toString().padStart(2, "0")}T00:00`} 
+                                  min={`${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, "0")}-${(today.getDate()).toString().padStart(2, "0")}T00:00`} 
                     required/>
                 </Form.Group>
                 <p className="create-pj-err-msg">{errors.pjDate}</p>

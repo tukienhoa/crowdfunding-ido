@@ -58,7 +58,7 @@
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     width: 30rem;
-    height: 29rem;
+    height: 32.5rem;
     margin-left: 8rem;
     border-radius: 20px;
     padding: 2rem;
@@ -188,4 +188,22 @@
     background-color: red;
     letter-spacing: 0.01em;
     
+}
+
+.claim-token-btn, .claim-token-btn:hover {
+    background-color: #8a00c2;
+    border: none;
+    margin-top: 1.2rem;
+    width: 23rem;
+    height: 2.5rem;
+    margin-left: 1.5rem;
+}
+
+.get-raised-btn, .get-raised-btn:hover {
+    background-color:#088832;
+    border: none;
+    margin-top: 2rem;
+    width: 23rem;
+    height: 3rem;
+    margin-left: 1.5rem;
 }
