@@ -238,11 +238,11 @@ const ProjectDetails = () => {
                         </tr>
                         <tr>
                             <th scope="row">Multiplier</th>
-                            <td>{projectDetails ? (projectDetails.params.multiplier[0] / projectDetails.params.multiplier[1])  : null}</td>
+                            <td>{projectDetails ? (projectDetails.params.multiplier)  : null}</td>
                         </tr>
                         <tr>
                             <th scope="row">Raise goal</th>
-                            <td>{projectDetails ? (projectDetails.params.baseAmount.toNumber() / (projectDetails.params.multiplier[0] / projectDetails.params.multiplier[1])) : null}</td>
+                            <td>{projectDetails ? (projectDetails.params.baseAmount.toNumber() / (projectDetails.params.multiplier)) : null}</td>
                         </tr>
                         <tr>
                             <th scope="row">Open range</th>
