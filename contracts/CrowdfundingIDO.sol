@@ -104,23 +104,23 @@ contract CrowdfundingIDO is Ownable {
         return idos[id];
     }
 
-    function vestingFor(uint256 id)
-        public
-        view
-        returns (Vesting[MAX_VESTING_OCURRENCES] memory vesting)
-    {
-        return _vesting[id];
-    }
+    // function vestingFor(uint256 id)
+    //     public
+    //     view
+    //     returns (Vesting[MAX_VESTING_OCURRENCES] memory vesting)
+    // {
+    //     return _vesting[id];
+    // }
 
-    function claimVesting(uint256 id, uint256 index) external {
-        Vesting storage vesting = _vesting[id][index];
-        IDO storage ido = getId(id);
-        require(!vesting.claimed, "Already claimed");
-        require(vesting.timestamp >= block.timestamp);
-        require(ido.owner == msg.sender, "Not IDO Owner");
-        ido.params.token.mint(vesting.beneficiary, vesting.amount);
-        vesting.claimed = true;
-    }
+    // function claimVesting(uint256 id, uint256 index) external {
+    //     Vesting storage vesting = _vesting[id][index];
+    //     IDO storage ido = getId(id);
+    //     require(!vesting.claimed, "Already claimed");
+    //     require(vesting.timestamp >= block.timestamp);
+    //     require(ido.owner == msg.sender, "Not IDO Owner");
+    //     ido.params.token.mint(vesting.beneficiary, vesting.amount);
+    //     vesting.claimed = true;
+    // }
 
     // function setLockingAddress(address where) public onlyOwner {
     //     _lockingContract = ILockedAmount(where);
@@ -186,7 +186,10 @@ contract CrowdfundingIDO is Ownable {
      */
     function withdraw(uint256 id, uint256 amount) public {
         IDO storage ido = getId(id);
+        require(block.timestamp >= ido.params.open.end, "Project still open");
+        require(ido.paidToOwner == 0, "Already paid to owner");
         require(bought[id][msg.sender] >= amount, "Not enough bought");
+        require(!_beenPaid[id][msg.sender], "Already claimed token");
         bought[id][msg.sender] -= amount;
         ido.params.totalBought -= amount;
         payable(msg.sender).transfer(amount);
@@ -206,9 +209,9 @@ contract CrowdfundingIDO is Ownable {
     function getPayoutOn(uint256 id, address otherAddress) public {
         IDO storage ido = getId(id);
         uint256 amount = bought[id][msg.sender];
-        require(amount > 0, "Nothing to pay");
-        require(!_beenPaid[id][msg.sender], "Already paid");
-        require(block.timestamp >= ido.params.open.end, "Crowdsale still open");
+        require(amount > 0, "Nothing to claim");
+        require(!_beenPaid[id][msg.sender], "Already claimed");
+        require(block.timestamp >= ido.params.open.end, "Project still open");
         ido.params.token.mint(otherAddress, amount * ido.params.multiplier);
         _beenPaid[id][msg.sender] = true;
     }
@@ -230,7 +233,10 @@ contract CrowdfundingIDO is Ownable {
     function getRaised(uint256 id) public {
         IDO storage ido = getId(id);
         require(ido.owner == msg.sender, "must be owner");
-        require(ido.params.open.end <= block.timestamp, "ido must be ended");
+        require(
+            ido.params.open.end <= block.timestamp,
+            "Project must be ended"
+        );
         uint256 payout = ido.params.totalBought - ido.paidToOwner;
         payable(msg.sender).transfer(payout);
         ido.paidToOwner = ido.params.totalBought;

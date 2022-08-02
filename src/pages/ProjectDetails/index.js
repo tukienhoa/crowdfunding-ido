@@ -105,16 +105,8 @@ const ProjectDetails = () => {
     const [amount, setAmount] = useState(0);
     const buyIDOToken = async () => {
         if (getCookie("account")) {
-            const provider = new ethers.providers.Web3Provider(window.ethereum)
-            const signer = provider.getSigner();
-            const contract = new ethers.Contract(cfAddress, CrowdfundingIDO.abi, signer);
-            try {
-                await contract.buy(project_params.projectId, amount, {value: amount});
-                setTotalBought(parseFloat(totalBought) + parseFloat(amount));
-                setYouBought(parseFloat(youBought) + parseFloat(amount));
-            } 
-            catch (error) {
-                toast.error(error.reason ? error.reason.substring(20) : error, {
+            if (amount <= 0 || amount % 1 !== 0) {
+                toast.error("Invalid amount", {
                     position: "top-center",
                     autoClose: 4000,
                     hideProgressBar: false,
@@ -123,6 +115,27 @@ const ProjectDetails = () => {
                     draggable: true,
                     progress: undefined,
                 });
+            }
+            else {
+                const provider = new ethers.providers.Web3Provider(window.ethereum)
+                const signer = provider.getSigner();
+                const contract = new ethers.Contract(cfAddress, CrowdfundingIDO.abi, signer);
+                try {
+                    await contract.buy(project_params.projectId, amount, {value: amount});
+                    setTotalBought(parseFloat(totalBought) + parseFloat(amount));
+                    setYouBought(parseFloat(youBought) + parseFloat(amount));
+                } 
+                catch (error) {
+                    toast.error(error.reason ? error.reason.substring(20) : error, {
+                        position: "top-center",
+                        autoClose: 4000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
             }
         }
         else {
@@ -140,16 +153,8 @@ const ProjectDetails = () => {
 
     const withdraw = async () => {
         if (getCookie("account")) {
-            const provider = new ethers.providers.Web3Provider(window.ethereum)
-            const signer = provider.getSigner();
-            const contract = new ethers.Contract(cfAddress, CrowdfundingIDO.abi, signer);
-            try {
-                await contract.withdraw(project_params.projectId, amount);
-                setTotalBought(parseFloat(totalBought) - parseFloat(amount));
-                setYouBought(parseFloat(youBought) - parseFloat(amount));
-            } 
-            catch (error) {
-                toast.error(error.reason, {
+            if (totalBought === projectDetails.params.baseAmount.toNumber()) {
+                toast.error("Cannot withdraw in a completed project", {
                     position: "top-center",
                     autoClose: 4000,
                     hideProgressBar: false,
@@ -158,6 +163,40 @@ const ProjectDetails = () => {
                     draggable: true,
                     progress: undefined,
                 });
+            }
+            else {
+                if (amount <= 0 || amount % 1 !== 0) {
+                    toast.error("Invalid amount", {
+                        position: "top-center",
+                        autoClose: 4000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+                else {
+                    const provider = new ethers.providers.Web3Provider(window.ethereum)
+                    const signer = provider.getSigner();
+                    const contract = new ethers.Contract(cfAddress, CrowdfundingIDO.abi, signer);
+                    try {
+                        await contract.withdraw(project_params.projectId, amount);
+                        setTotalBought(parseFloat(totalBought) - parseFloat(amount));
+                        setYouBought(parseFloat(youBought) - parseFloat(amount));
+                    } 
+                    catch (error) {
+                        toast.error(error.reason, {
+                            position: "top-center",
+                            autoClose: 4000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: false,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                    }
+                }
             }
         }
         else {
