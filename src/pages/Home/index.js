@@ -116,12 +116,10 @@ const Home = () => {
                             <div className="display-row">
                                 <p>Base Amount</p>
                                 <p>{project.params.baseAmount.toNumber()}</p>
-                                {/* <p>{project.goal}</p> */}
                             </div>
                             <div className="display-row">
                                 <p>Total Bought</p>
                                 <p>{project.params.totalBought.toNumber()}</p>
-                                {/* <p>{project.donation ? project.donation : 0}</p> */}
                             </div>
                         </div>
                     </div>
