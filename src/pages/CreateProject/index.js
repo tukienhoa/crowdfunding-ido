@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {Form, FormControl, InputGroup, Button} from 'react-bootstrap';
+import {Form, Button} from 'react-bootstrap';
 
 import {getCookie} from '../../utils/cookie';
 

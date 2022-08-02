@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Nav, Navbar, Container, Button, Dropdown, DropdownButton } from 'react-bootstrap';
 import {ethers} from 'ethers';
 
@@ -54,7 +54,9 @@ const NavBar = () => {
         };
     }();
     
-    window.setInterval(checkBalance, 500);
+    if (getCookie("account")) {
+        window.setInterval(checkBalance, 2000);
+    }
 
     const connectWallet = () => {
         if (window.ethereum) {
@@ -91,6 +93,11 @@ const NavBar = () => {
         </div>
     )
 
+
+    const handleViewMyProjects = () => {
+        window.location.href = "/my-projects";
+    }
+
     // Nav bar for logged in user
     const LoggedInNav = (
         <div className="mystarter-nav">
@@ -98,8 +105,8 @@ const NavBar = () => {
             <DropdownButton variant="success" align="end" 
                             title={account.substring(0, 5) + '...' + account.substring(account.length - 4, account.length)} 
                             id="dropdown-menu-align-end">
-                {/* <Dropdown.Item onClick={() => handleViewWallet()}>My Wallet</Dropdown.Item> */}
-                {/* <Dropdown.Divider /> */}
+                <Dropdown.Item onClick={handleViewMyProjects}>My Projects</Dropdown.Item>
+                <Dropdown.Divider />
                 <Dropdown.Item onClick={handleLogOut}>Log Out</Dropdown.Item>
             </DropdownButton>
         </div>
