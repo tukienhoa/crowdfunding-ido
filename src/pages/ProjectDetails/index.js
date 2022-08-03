@@ -22,6 +22,7 @@ const ProjectDetails = () => {
     const [desc, setDesc] = useState("");
 
     const [totalBought, setTotalBought] = useState(0);
+    const [totalClaimed, setTotalClaimed] = useState(0);
     const [projectDetails, setProjectDetails] = useState(null);
     const fetchProjectDetails = useCallback(async () => {
         if (typeof window.ethereum !== 'undefined') {
@@ -30,6 +31,7 @@ const ProjectDetails = () => {
             try {
                 const project = await contract.information(project_params.projectId);
                 setProjectDetails(project);
+                setTotalClaimed(project.paidToOwner.toNumber());
                 setTotalBought(project.params.totalBought.toNumber());
                 fetch(project.params.description)
                     .then( r => r.text() )
@@ -256,8 +258,38 @@ const ProjectDetails = () => {
         }
     }
 
-    const getRaised = () => {
-
+    const getRaised = async () => {
+        if (totalClaimed === 0) {
+            const provider = new ethers.providers.Web3Provider(window.ethereum)
+            const signer = provider.getSigner();
+            const contract = new ethers.Contract(cfAddress, CrowdfundingIDO.abi, signer);
+            try {
+                await contract.getRaised(project_params.projectId);
+                setTotalClaimed(totalBought);
+            } 
+            catch (error) {
+                toast.error(error.reason ? error.reason.substring(20) : error, {
+                    position: "top-center",
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        }
+        else {
+            toast.error("You already claimed", {
+                position: "top-center",
+                autoClose: 4000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+        }
     }
 
     return (
@@ -344,17 +376,21 @@ const ProjectDetails = () => {
 
                         <Progressbar bgcolor="#0d6efd" progress={projectDetails ? (projectDetails.params.totalBought.toNumber() / projectDetails.params.baseAmount.toNumber() * 100) : 0} height={40} width={20}/>
 
+                        {projectDetails ? (projectDetails.owner.toLowerCase() !== getCookie("account").toLowerCase() ?
                         <div className="details-display-row you-bought">
                             <p>You Bought</p>
                             <p>{youBought}</p>
-                        </div>
+                        </div> : null) : null}
+                    
                         
                         <Form method="POST" className="details-donate-section">
+                            {projectDetails ? (projectDetails.owner.toLowerCase() !== getCookie("account").toLowerCase() ?
                             <Form.Group>
                                 <Form.Control className="details-input-donate" type="number" placeholder="Amount" name="donateAmount" 
                                     onChange={(e) => setAmount(e.target.value.length === 0 ? 0 : e.target.value)}  
                                 />
-                            </Form.Group>
+                            </Form.Group> : null) : null}
+
                             {projectDetails ? (projectDetails.owner.toLowerCase() !== getCookie("account").toLowerCase() ?
                             (<div>
                                 <div className="donate-section-btns">
