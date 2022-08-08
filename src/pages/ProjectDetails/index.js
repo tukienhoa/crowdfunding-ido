@@ -14,7 +14,7 @@ import { ethers } from 'ethers';
 import CrowdfundingIDO from '../../artifacts/contracts/CrowdfundingIDO.sol/CrowdfundingIDO.json';
 // const cfAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 //Ropsten Address
-const cfAddress = "0xD08E4fdb1963894E0fB566b3a97f2Daf4584260c";
+const cfAddress = "0x9C950D476F05DcB0D44aa41c6E6DB0888Bc9181d";
 
 const ProjectDetails = () => {
     let project_params = useParams();
@@ -188,7 +188,7 @@ const ProjectDetails = () => {
                         setYouBought(parseFloat(youBought) - parseFloat(amount));
                     } 
                     catch (error) {
-                        toast.error(error.reason, {
+                        toast.error(error.reason ? error.reason.substring(20) : error, {
                             position: "top-center",
                             autoClose: 4000,
                             hideProgressBar: false,
@@ -234,7 +234,7 @@ const ProjectDetails = () => {
                 await contract.getPayout(project_params.projectId);
             } 
             catch (error) {
-                toast.error(error.reason, {
+                toast.error(error.reason ? error.reason.substring(20) : error, {
                     position: "top-center",
                     autoClose: 4000,
                     hideProgressBar: false,
@@ -348,13 +348,12 @@ const ProjectDetails = () => {
                             <td>{projectDetails ? (projectDetails.params.multiplier)  : null}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Raise goal</th>
-                            <td>{projectDetails ? (projectDetails.params.baseAmount.toNumber() / (projectDetails.params.multiplier)) : null}</td>
+                            <th scope="row">Open</th>
+                            <td>{projectDetails ? convertTimestamp2Date(projectDetails.params.open[0].toNumber() * 1000) : null}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Open range</th>
-                            <td>{projectDetails ? `${convertTimestamp2Date(projectDetails.params.open[0].toNumber() * 1000)} - ${convertTimestamp2Date(projectDetails.params.open[1].toNumber() * 1000)}` 
-                                                  : null}</td>
+                            <th scope="row">End</th>
+                            <td>{projectDetails ? convertTimestamp2Date(projectDetails.params.open[1].toNumber() * 1000) : null}</td>
                         </tr>
                     </tbody>
                     </table>

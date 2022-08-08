@@ -39,9 +39,13 @@
     width: 70%;
 }
 
-.details-bg, .details-desc-text {
+.details-bg {
     width: 60rem;
-    max-height: 40rem;
+    height: 32.5rem;
+}
+
+.details-desc-text {
+    width: 60rem;
 }
 
 .details-desc-title {

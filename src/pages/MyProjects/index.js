@@ -8,10 +8,11 @@ import CrowdfundingIDO from '../../artifacts/contracts/CrowdfundingIDO.sol/Crowd
 import { getCookie } from '../../utils/cookie';
 // const cfAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 //Ropsten Address
-const cfAddress = "0xD08E4fdb1963894E0fB566b3a97f2Daf4584260c";
+const cfAddress = "0x9C950D476F05DcB0D44aa41c6E6DB0888Bc9181d";
 
 const MyProjects = () => {
 
+    const [IDOs, setIDOs] = useState([]);
     const [ownedIDOs, setOwnedIDOs] = useState([]);
     const [participatedIDOs, setParticipatedIDOs] = useState([]);
 
@@ -28,9 +29,11 @@ const MyProjects = () => {
                 idosLength = idosLength.toNumber();
                 var ownedList = [];
                 var participatedList = [];
+                var IDOList = [];
 
                 for (let i = 0; i < idosLength; i++) {
                     const IDO = await contract.information(i);
+                    IDOList.push(IDO);
                     if (IDO.owner.toLowerCase() === getCookie("account").toLowerCase()) {
                         ownedList.push(IDO);
                     }
@@ -41,7 +44,7 @@ const MyProjects = () => {
                 }
                 setOwnedIDOs(ownedList);
                 setParticipatedIDOs(participatedList);
-                console.log(participatedList);
+                setIDOs(IDOList);
             } 
             catch (error) {
             }
@@ -74,8 +77,21 @@ const MyProjects = () => {
                 <Button variant="primary" onClick={handlePublishProject} className="my-pj-publish-btn">Publish Project</Button>
             </div>
             <div className="wrapper">
-                {ownedIDOs.map((project, index) => (
-                    <div className="home-project-card" onClick={() => handleProjectClick(index)} key={index}>
+                {ownedIDOs.length === 0 ? 
+                    <p className="my-pjs-empty">You haven't created any project.</p>
+                    : null
+                }
+                {ownedIDOs.map((project, index) => {
+                    let idx = 0;
+                    for (let i = 0; i < IDOs.length; i++) {
+                        if (project.params.token === IDOs[i].params.token) {
+                            idx = i;
+                            break;
+                        }
+                    }
+
+                    return (
+                    <div className="home-project-card" onClick={() => handleProjectClick(idx)} key={index}>
                         <img src={project.params.bgIPFS} alt="project-bg" className="home-pj-image"/>
                         <img src={project.params.logoIPFS} alt="project-logo" className="home-pj-logo"/>
                         <div className="card-info">
@@ -95,12 +111,26 @@ const MyProjects = () => {
                             </div>
                         </div>
                     </div>
-                ))}
+                    )
+                })}
             </div>
             <p className="my-pj-page-title">Participated Projects</p>
             <div className="wrapper">
-                {participatedIDOs.map((project, index) => (
-                    <div className="home-project-card" onClick={() => handleProjectClick(index)} key={index}>
+                {participatedIDOs.length === 0 ? 
+                        <p className="my-pjs-empty">You haven't participated in any project.</p>
+                        : null
+                }
+                {participatedIDOs.map((project, index) => {
+                    let idx = 0;
+                    for (let i = 0; i < IDOs.length; i++) {
+                        if (project.params.token === IDOs[i].params.token) {
+                            idx = i;
+                            break;
+                        }
+                    }
+
+                    return (
+                    <div className="home-project-card" onClick={() => handleProjectClick(idx)} key={index}>
                         <img src={project.params.bgIPFS} alt="project-bg" className="home-pj-image"/>
                         <img src={project.params.logoIPFS} alt="project-logo" className="home-pj-logo"/>
                         <div className="card-info">
@@ -120,7 +150,8 @@ const MyProjects = () => {
                             </div>
                         </div>
                     </div>
-                ))}
+                    )
+                })}
             </div>
         </div>
     );
