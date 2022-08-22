@@ -8,13 +8,14 @@ import "./CreateProject.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { TextUpload, ImageUpload } from "react-ipfs-uploader";
+import { TextUpload } from '../../components/TextUpload';
+import { ImageUpload } from '../../components/ImageUpload';
 
 import { ethers } from 'ethers';
 import CrowdfundingIDO from '../../artifacts/contracts/CrowdfundingIDO.sol/CrowdfundingIDO.json';
 // const cfAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 //Ropsten Address
-const cfAddress = "0x9C950D476F05DcB0D44aa41c6E6DB0888Bc9181d";
+const cfAddress = "0x602BaC7aF27ED1aab5dd5912E456a5512CE34d70";
 
 const CreateProject = () => {
 
